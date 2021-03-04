@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/alexa/AndroidStudioProjects/todoey_flutter/lib/constant.dart';
+import 'package:todoey_flutter/widgets/task_list.dart';
+import 'package:todoey_flutter/widgets/add_task.dart';
+import 'package:todoey_flutter/constant.dart';
+
+TaskList tasks = TaskList();
 
 class TasksScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       backgroundColor: Colors.lightBlueAccent,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,30 +56,13 @@ class TasksScreen extends StatelessWidget {
             ),
           ),
           Expanded(
-            flex: 3,
+            flex: 4,
             child: Material(
               color: Colors.white,
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15.0),
                   topRight: Radius.circular(15.0)),
-              child: ListView(
-                padding: const EdgeInsets.only(
-                    top: 50.0, left: 40.0, right: 40.0, bottom: 60.0),
-                children: <Widget>[
-                  ListTile(
-                    title: Text('Buy Milk'),
-                    trailing: Checkbox(
-                      value: false,
-                    ),
-                  ),
-                  ListTile(
-                    title: Text('Buy Milk'),
-                    trailing: Checkbox(
-                      value: false,
-                    ),
-                  ),
-                ],
-              ),
+              child: tasks,
             ),
           ),
         ],
@@ -83,8 +71,26 @@ class TasksScreen extends StatelessWidget {
         tooltip: 'Add', // used by assistive technologies
         child: Icon(Icons.add),
         backgroundColor: Colors.lightBlueAccent,
-        onPressed: null,
+        onPressed: () async {
+          //bottom widget
+          var typedTask = await showModalBottomSheet(context: context,
+              builder: (context) => SingleChildScrollView(
+                  child: Container(
+                      child: Container(
+                        padding: EdgeInsets.only(
+                            bottom: MediaQuery.of(context).viewInsets.bottom), //to make the modal just right above the keybaord
+                          child: AddTaskScreen()
+                      )
+                  )
+              ),
+            backgroundColor: Colors.transparent,
+            isScrollControlled: true,
+          );
+          //TO DO store the typed into the tasklist... somehow
+        },
       ),
     );
   }
+
+
 }
