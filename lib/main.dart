@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'file:///C:/Users/alexa/AndroidStudioProjects/todoey_flutter/lib/screens/task_screen.dart';
+import 'screens/task_screen.dart';
 
 void main() {
   runApp(MyApp());

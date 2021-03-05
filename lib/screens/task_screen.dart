@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:todoey_flutter/widgets/task_list.dart';
-import 'package:todoey_flutter/widgets/add_task.dart';
+import 'add_task.dart';
+import 'package:todoey_flutter/widgets/task.dart';
 import 'package:todoey_flutter/constant.dart';
 
-TaskList tasks = TaskList();
+class TasksScreen extends StatefulWidget {
+  @override
+  _TasksScreenState createState() => _TasksScreenState();
+}
 
-class TasksScreen extends StatelessWidget {
+class _TasksScreenState extends State<TasksScreen> {
+
+  List<Task> tasks = [
+  ];
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +54,7 @@ class TasksScreen extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '12 Tasks Left',
+                    tasks.length.toString() + ' Tasks Left',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18.0,
@@ -62,7 +71,7 @@ class TasksScreen extends StatelessWidget {
               borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(15.0),
                   topRight: Radius.circular(15.0)),
-              child: tasks,
+              child: TaskList(tasks: tasks,), //list of task
             ),
           ),
         ],
@@ -71,26 +80,42 @@ class TasksScreen extends StatelessWidget {
         tooltip: 'Add', // used by assistive technologies
         child: Icon(Icons.add),
         backgroundColor: Colors.lightBlueAccent,
-        onPressed: () async {
+        onPressed: () {
           //bottom widget
-          var typedTask = await showModalBottomSheet(context: context,
-              builder: (context) => SingleChildScrollView(
-                  child: Container(
-                      child: Container(
-                        padding: EdgeInsets.only(
-                            bottom: MediaQuery.of(context).viewInsets.bottom), //to make the modal just right above the keybaord
-                          child: AddTaskScreen()
-                      )
-                  )
-              ),
+          showModalBottomSheet(context: context,
+            // isScrollControlled: true,
+            builder: (context) => AddTaskScreen(
+                    (newTaskTitle) {
+                      setState(() {
+                        if (newTaskTitle != null) {
+                          tasks.add(Task(name: newTaskTitle));
+                        }
+                      });
+                    }
+                    ),
+            //   // SingleChildScrollView(
+              //         child: Container(
+              //           padding:
+              //           EdgeInsets.only(
+              //               bottom: MediaQuery.of(context).viewInsets.bottom), //to make the modal just right above the keybaord
+              //             child: AddTaskScreen(
+              //                     (newTaskTitle) {
+              //                   setState(() {
+              //                     if (newTaskTitle != null) {
+              //                       tasks.add(Task(name: newTaskTitle));
+              //
+              //                     }
+              //                   });
+              //                 }
+              //             ),
+              //     )
+              // ),
             backgroundColor: Colors.transparent,
-            isScrollControlled: true,
+
           );
           //TO DO store the typed into the tasklist... somehow
         },
       ),
     );
   }
-
-
 }

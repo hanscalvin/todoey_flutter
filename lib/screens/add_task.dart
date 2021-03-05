@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-String newTask;
+String newTaskTitle;
 
 class AddTaskScreen extends StatelessWidget {
+
+  final Function taskCallback;
+  AddTaskScreen(this.taskCallback);
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -26,12 +31,13 @@ class AddTaskScreen extends StatelessWidget {
             autofocus: true,
             textAlign: TextAlign.center,
             onChanged: (value){
-              newTask = value;
+              newTaskTitle = value;
             },
           ),
           TextButton(
             onPressed:(){
-            Navigator.pop(context,newTask);
+              taskCallback(newTaskTitle);
+              Navigator.pop(context);
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateColor.resolveWith((states) => Colors.lightBlueAccent),
